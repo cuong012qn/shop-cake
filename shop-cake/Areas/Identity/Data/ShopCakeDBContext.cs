@@ -27,5 +27,11 @@ namespace shop_cake.Data
         }
 
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<Bill> Bills { get; set; }
+        public DbSet<BillDetail> BillDetails { get; set; }
+        public DbSet<New> News { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Slide> Slides { get; set; }
+        public DbSet<TypeProduct> TypeProducts { get; set; }
     }
 }
