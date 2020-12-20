@@ -17,8 +17,9 @@ namespace shop_cake.Areas.Identity
         {
             builder.ConfigureServices((context, services) =>
             {
+
                 services.AddDbContext<ShopCakeDBContext>(options =>
-                    options.UseSqlServer(connectionString: @"Server=DESKTOP-7UOK1F3;Database=shop-cake;Trusted_Connection=True;MultipleActiveResultSets=true"));
+                    options.UseSqlServer(connectionString: "Server=DESKTOP-7UOK1F3;Database=shop-cake;Trusted_Connection=True;MultipleActiveResultSets=true"));
 
                 services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
                     .AddEntityFrameworkStores<ShopCakeDBContext>();

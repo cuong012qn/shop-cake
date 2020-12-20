@@ -10,6 +10,20 @@ namespace shop_cake.Models
     [Table("Bills")]
     public class Bill
     {
+        public Bill()
+        {
+
+        }
+
+        public Bill(DateTime dateOrder, double total, string payment, string note, int iDCustomer)
+        {
+            DateOrder = dateOrder;
+            Total = total;
+            Payment = payment;
+            Note = note;
+            IDCustomer = iDCustomer;
+        }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key, Column(Order = 0)]
         public int ID { get; set; }

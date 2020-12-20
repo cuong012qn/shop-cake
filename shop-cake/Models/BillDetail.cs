@@ -10,6 +10,19 @@ namespace shop_cake.Models
     [Table("BillDetail")]
     public class BillDetail
     {
+        public BillDetail()
+        {
+
+        }
+
+        public BillDetail(int quantity, double unitPrice, int iDBill, int iDProduct)
+        {
+            Quantity = quantity;
+            UnitPrice = unitPrice;
+            IDBill = iDBill;
+            IDProduct = iDProduct;
+        }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key, Column(Order = 0)]
         public int ID { get; set; }

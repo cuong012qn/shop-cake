@@ -6,6 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using shop_cake.Data;
+using Microsoft.Extensions.DependencyInjection;
+using shop_cake.Extensions;
 
 namespace shop_cake
 {
@@ -13,7 +16,15 @@ namespace shop_cake
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+            using (var scope = host.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetService<ShopCakeDBContext>();
+                var seeding = new DataSeeding(context);
+                seeding.SeedData();
+            }
+            host.Run();
+            //CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

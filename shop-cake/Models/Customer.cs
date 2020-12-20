@@ -10,6 +10,21 @@ namespace shop_cake.Models
     [Table("Customer")]
     public class Customer
     {
+        public Customer()
+        {
+
+        }
+
+        public Customer(string name, string gender, string email, string address, string phone, string note)
+        {
+            Name = name;
+            Gender = gender;
+            Email = email;
+            Address = address;
+            Phone = phone;
+            Note = note;
+        }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key, Column(Order = 0)]
         public int ID { get; set; }

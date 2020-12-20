@@ -32,6 +32,13 @@ namespace shop_cake.Models
         public string Unit { get; set; }
 
         [Required]
+        public int New { get; set; }
+
+        public DateTime? CreateAt { get; set; }
+
+        public DateTime? UpdateAt { get; set; }
+
+        [Required]
         public int IDType { get; set; }
 
         [ForeignKey("IDType")]

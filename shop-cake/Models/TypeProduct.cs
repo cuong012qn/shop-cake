@@ -10,6 +10,18 @@ namespace shop_cake.Models
     [Table("TypeProduct")]
     public class TypeProduct
     {
+        public TypeProduct()
+        {
+
+        }
+
+        public TypeProduct(string name, string description, string image)
+        {
+            Name = name;
+            Description = description;
+            Image = image;
+        }
+
         [Key, Column(Order = 0), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
 
