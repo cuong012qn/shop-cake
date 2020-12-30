@@ -33,6 +33,12 @@ namespace shop_cake
             //services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
             //        .AddEntityFrameworkStores<ShopCakeDBContext>();
 
+            services.AddDbContext<ShopCakeDBContext>(options =>
+                    options.UseSqlServer(connectionString: "Server=DESKTOP-7UOK1F3;Database=shop-cake;Trusted_Connection=True;MultipleActiveResultSets=true"));
+
+            services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddEntityFrameworkStores<ShopCakeDBContext>();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddRazorPages().AddRazorRuntimeCompilation();
@@ -56,8 +62,8 @@ namespace shop_cake
 
             app.UseRouting();
 
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
