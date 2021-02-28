@@ -92,29 +92,32 @@
                         <div class="clearfix"></div>
                     </div>
 
-                    <div class="row">
-                        @for (int i = 0; i < 4; i++)
-                        {
-                            <div class="col-sm-3">
-                                <div class="single-item">
-                                    <div class="single-item-header">
-                                        <a href="product.html"><img src="image/product/@Model[i].Image" alt="" style="height: 270px; width: 300px"></a>
-                                    </div>
-                                    <div class="single-item-body">
-                                        <p class="single-item-title">@Html.Raw(Model[i].Name)</p>
-                                        <p class="single-item-price">
-                                            <span>@Model[i].UnitPrice</span>
-                                        </p>
-                                    </div>
-                                    <div class="single-item-caption">
-                                        <a class="add-to-cart pull-left" href="shopping_cart.html"><i class="fa fa-shopping-cart"></i></a>
-                                        <a class="beta-btn primary" asp-action="Detail" asp-route-id="@Model[i].ID">Details <i class="fa fa-chevron-right"></i></a>
-                                        <div class="clearfix"></div>
+                    @if (Model.Count() > 0)
+                    {
+                        <div class="row">
+                            @for (int i = 0; i < 4; i++)
+                            {
+                                <div class="col-sm-3">
+                                    <div class="single-item">
+                                        <div class="single-item-header">
+                                            <a asp-action="Detail" asp-route-id="@Model[i].ID"><img src="~/image/product/@Model[i].Image" alt="" style="height: 270px; width: 300px"></a>
+                                        </div>
+                                        <div class="single-item-body">
+                                            <p class="single-item-title">@Html.Raw(Model[i].Name)</p>
+                                            <p class="single-item-price">
+                                                <span>@Model[i].UnitPrice</span>
+                                            </p>
+                                        </div>
+                                        <div class="single-item-caption">
+                                            <a class="add-to-cart pull-left" href="shopping_cart.html"><i class="fa fa-shopping-cart"></i></a>
+                                            <a class="beta-btn primary" asp-action="Detail" asp-route-id="@Model[i].ID">Details <i class="fa fa-chevron-right"></i></a>
+                                            <div class="clearfix"></div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        }
-                    </div>
+                            }
+                        </div>
+                    }
                 </div> <!-- .beta-products-list -->
 
                 <div class="space50">&nbsp;</div>
@@ -131,7 +134,7 @@
                             <div class="col-sm-3">
                                 <div class="single-item">
                                     <div class="single-item-header">
-                                        <a href="product.html"><img src="~/image/product/@item.Image" alt="" style="height: 270px; width: 300px"></a>
+                                        <a asp-action="Detail" asp-route-id="@item.ID"><img src="~/image/product/@item.Image" alt="" style="height: 270px; width: 300px"></a>
                                     </div>
                                     <div class="single-item-body">
                                         <p class="single-item-title">@item.Name</p>

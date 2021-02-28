@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using shop_cake.Data;
 using shop_cake.Models;
+using shop_cake.ViewModel;
 
 namespace shop_cake.Controllers
 {
+    //[Route("Admin/Product")]
     public class ProductController : Controller
     {
         private readonly ShopCakeDBContext _context;
@@ -20,6 +22,7 @@ namespace shop_cake.Controllers
         }
 
         // GET: Product
+        [Route("Admin/Product")]
         public async Task<IActionResult> Index()
         {
             var shopCakeDBContext = _context.Products.Include(p => p.TypeProduct);
@@ -46,9 +49,10 @@ namespace shop_cake.Controllers
         }
 
         // GET: Product/Create
+        [Route("Admin/Product/Create")]
         public IActionResult Create()
         {
-            ViewData["IDType"] = new SelectList(_context.TypeProducts, "ID", "Description");
+            ViewData["Name"] = new SelectList(_context.TypeProducts, "ID", "Name");
             return View();
         }
 
@@ -57,7 +61,7 @@ namespace shop_cake.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,Description,UnitPrice,PromotionPrice,Image,Unit,New,CreateAt,UpdateAt,IDType")] Product product)
+        public async Task<IActionResult> Create([Bind("ID,Name,Description,UnitPrice,PromotionPrice,Image,Unit,New,IDType")] ProductViewModel product)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +69,7 @@ namespace shop_cake.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IDType"] = new SelectList(_context.TypeProducts, "ID", "Description", product.IDType);
+            ViewData["Name"] = new SelectList(_context.TypeProducts, "ID", "Name", product.IDType);
             return View(product);
         }
 

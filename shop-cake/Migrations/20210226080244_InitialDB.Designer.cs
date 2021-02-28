@@ -10,7 +10,7 @@ using shop_cake.Data;
 namespace shop_cake.Migrations
 {
     [DbContext(typeof(ShopCakeDBContext))]
-    [Migration("20201221091230_InitialDB")]
+    [Migration("20210226080244_InitialDB")]
     partial class InitialDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

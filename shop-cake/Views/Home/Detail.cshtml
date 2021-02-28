@@ -1,5 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Product> newProducts = ViewData["NewProducts"] as List<Product>;
 }
 
 @model Product
@@ -175,41 +176,61 @@
                     </div>
                 </div>
             </div> <!-- best sellers widget -->
-            <div class="widget">
-                <h3 class="widget-title">New Products</h3>
-                <div class="widget-body">
-                    <div class="beta-sales beta-lists">
-                        <div class="media beta-sales-item">
-                            <a class="pull-left" href="product.html"><img src="assets/dest/images/products/sales/1.png" alt=""></a>
-                            <div class="media-body">
-                                Sample Woman Top
-                                <span class="beta-sales-price">$34.55</span>
-                            </div>
-                        </div>
-                        <div class="media beta-sales-item">
-                            <a class="pull-left" href="product.html"><img src="assets/dest/images/products/sales/2.png" alt=""></a>
-                            <div class="media-body">
-                                Sample Woman Top
-                                <span class="beta-sales-price">$34.55</span>
-                            </div>
-                        </div>
-                        <div class="media beta-sales-item">
-                            <a class="pull-left" href="product.html"><img src="assets/dest/images/products/sales/3.png" alt=""></a>
-                            <div class="media-body">
-                                Sample Woman Top
-                                <span class="beta-sales-price">$34.55</span>
-                            </div>
-                        </div>
-                        <div class="media beta-sales-item">
-                            <a class="pull-left" href="product.html"><img src="assets/dest/images/products/sales/4.png" alt=""></a>
-                            <div class="media-body">
-                                Sample Woman Top
-                                <span class="beta-sales-price">$34.55</span>
-                            </div>
+            @if (newProducts.Count() > 0)
+            {
+                <div class="widget">
+                    <h3 class="widget-title">New Products</h3>
+                    <div class="widget-body">
+                        <div class="beta-sales beta-lists">
+                            @foreach (var item in newProducts)
+                            {
+                                <div class="media beta-sales-item">
+                                    <a class="pull-left" asp-action="Detail" asp-route-id="@item.ID"><img src="~/image/product/@item.Image" alt=""></a>
+                                    <div class="media-body">
+                                        @item.Name
+                                        @if (item.PromotionPrice != 0)
+                                        {
+                                            <span class="beta-sales-price">@item.PromotionPrice</span>
+                                        }
+                                        else
+                                        { 
+                                            <span class="beta-sales-price">@item.UnitPrice</span>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            @*<div class="media beta-sales-item">
+                                    <a class="pull-left" href="product.html"><img src="assets/dest/images/products/sales/1.png" alt=""></a>
+                                    <div class="media-body">
+                                        Sample Woman Top
+                                        <span class="beta-sales-price">$34.55</span>
+                                    </div>
+                                </div>
+                                <div class="media beta-sales-item">
+                                    <a class="pull-left" href="product.html"><img src="assets/dest/images/products/sales/2.png" alt=""></a>
+                                    <div class="media-body">
+                                        Sample Woman Top
+                                        <span class="beta-sales-price">$34.55</span>
+                                    </div>
+                                </div>
+                                <div class="media beta-sales-item">
+                                    <a class="pull-left" href="product.html"><img src="assets/dest/images/products/sales/3.png" alt=""></a>
+                                    <div class="media-body">
+                                        Sample Woman Top
+                                        <span class="beta-sales-price">$34.55</span>
+                                    </div>
+                                </div>
+                                <div class="media beta-sales-item">
+                                    <a class="pull-left" href="product.html"><img src="assets/dest/images/products/sales/4.png" alt=""></a>
+                                    <div class="media-body">
+                                        Sample Woman Top
+                                        <span class="beta-sales-price">$34.55</span>
+                                    </div>
+                                </div>*@
                         </div>
                     </div>
-                </div>
-            </div> <!-- best sellers widget -->
+                </div> <!-- best sellers widget -->
+            }
         </div>
     </div>
 </div>

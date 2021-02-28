@@ -27,14 +27,8 @@ namespace shop_cake
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<ShopCakeDBContext>(options =>
-            //options.UseSqlServer(@"Server=DESKTOP-7UOK1F3;Database=ShopCakeDB;Trusted_Connection=True;"));
-
-            //services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
-            //        .AddEntityFrameworkStores<ShopCakeDBContext>();
-
             services.AddDbContext<ShopCakeDBContext>(options =>
-                    options.UseSqlServer(connectionString: "Server=DESKTOP-7UOK1F3;Database=shop-cake;Trusted_Connection=True;MultipleActiveResultSets=true"));
+                    options.UseSqlServer(connectionString: "Server=DESKTOP-6CQ8Q1S\\SQLEXPRESS;Database=shop-cake;Trusted_Connection=True;MultipleActiveResultSets=true"));
 
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ShopCakeDBContext>();
@@ -70,6 +64,10 @@ namespace shop_cake
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                //localhost/admin/product
+                endpoints.MapControllerRoute(name: "product", pattern: "admin/product/{controller=Product}/{action=Index}");
+
                 endpoints.MapRazorPages();
             });
         }

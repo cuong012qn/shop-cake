@@ -39,6 +39,8 @@ namespace shop_cake.Controllers
         {
             if (id == null) return View(nameof(Index));
 
+            var getNewProduct = context.Products.Where(x => x.New.Equals(1)).OrderBy(x => x.UnitPrice).Take(4).ToList();
+            ViewData["NewProducts"] = getNewProduct;
             var getProduct = context.Products.SingleOrDefault(x => x.ID.Equals(id));
 
             return View(getProduct);

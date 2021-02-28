@@ -10,14 +10,16 @@ namespace shop_cake.Controllers
     //[Authorize]
     public class AdminController : Controller
     {
+        [Route("Admin")]
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Product()
-        {
-            return View();
-        }
+        //[Route("Admin/Products")]
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
     }
 }
