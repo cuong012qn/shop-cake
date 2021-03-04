@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using shop_cake.Areas.Identity.Data;
 using shop_cake.Models;
+using shop_cake.ViewModel;
 
 namespace shop_cake.Data
 {
@@ -33,5 +34,6 @@ namespace shop_cake.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Slide> Slides { get; set; }
         public DbSet<TypeProduct> TypeProducts { get; set; }
+        public DbSet<shop_cake.ViewModel.ProductViewModel> ProductViewModel { get; set; }
     }
 }

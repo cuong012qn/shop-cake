@@ -28,7 +28,7 @@ namespace shop_cake.Models
         [Required, MaxLength(255)]
         public string Image { get; set; }
 
-        [Required,MaxLength(255)]
+        [Required, MaxLength(255)]
         public string Unit { get; set; }
 
         [Required]
@@ -45,5 +45,19 @@ namespace shop_cake.Models
         public TypeProduct TypeProduct { get; set; }
 
         public IList<BillDetail> BillDetails { get; set; }
+
+        public void Update(string name, string description, double unitPrice, double promotionPrice,
+            string image, string unit, int _new, DateTime? updateAt, int IDType)
+        {
+            this.Name = name;
+            this.Description = description;
+            this.Unit = unit;
+            this.PromotionPrice = promotionPrice;
+            this.Image = image;
+            this.UnitPrice = unitPrice;
+            this.New = _new;
+            this.UpdateAt = updateAt.Value;
+            this.IDType = IDType;
+        }
     }
 }

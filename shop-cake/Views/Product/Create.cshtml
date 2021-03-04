@@ -21,8 +21,8 @@
     <section class="content">
         <div class="row">
             <div class="col-md-4">
-                <form asp-action="Create">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <form asp-action="Create" enctype="multipart/form-data">
+                    <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="form-group">
                         <label asp-for="Name" class="control-label"></label>
                         <input asp-for="Name" class="form-control" />
@@ -43,31 +43,35 @@
                         <input asp-for="PromotionPrice" class="form-control" />
                         <span asp-validation-for="PromotionPrice" class="text-danger"></span>
                     </div>
+
                     <div class="form-group">
-                        <label asp-for="Image" class="control-label"></label>
-                        <input asp-for="Image" class="form-control" />
-                        <span asp-validation-for="Image" class="text-danger"></span>
+                        @*<label asp-for="ImageUpload" class="control-label"></label>*@
+                        <img src="#" id="imgUpload" class="img-fluid" />
+                        <input asp-for="ImageUpload" class="form-control" accept=".jpg" />
+                        <span asp-validation-for="ImageUpload"></span>
                     </div>
+
                     <div class="form-group">
                         <label asp-for="Unit" class="control-label"></label>
                         <input asp-for="Unit" class="form-control" />
                         <span asp-validation-for="Unit" class="text-danger"></span>
                     </div>
+
                     <div class="form-group">
+                        <label asp-for="New" class="control-label"></label>
+                        <select asp-for="New" class="form-control">
+                            <option value="1" selected>New</option>
+                            <option value="0">Old</option>
+                        </select>
+                        <span asp-validation-for="New"></span>
+                    </div>
+
+                    @*<div class="form-group">
                         <label asp-for="New" class="control-label"></label>
                         <input asp-for="New" class="form-control" />
                         <span asp-validation-for="New" class="text-danger"></span>
-                    </div>
-                    @*<div class="form-group">
-                        <label asp-for="CreateAt" class="control-label"></label>
-                        <input asp-for="CreateAt" class="form-control" />
-                        <span asp-validation-for="CreateAt" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="UpdateAt" class="control-label"></label>
-                        <input asp-for="UpdateAt" class="form-control" />
-                        <span asp-validation-for="UpdateAt" class="text-danger"></span>
                     </div>*@
+
                     <div class="form-group">
                         <label asp-for="IDType" class="control-label"></label>
                         <select asp-for="IDType" class="form-control" asp-items="ViewBag.Name"></select>
@@ -86,4 +90,22 @@
 </div>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#imgUpload').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+
+        $("#ImageUpload").change(function () {
+            readURL(this);
+        });
+    </script>
 }

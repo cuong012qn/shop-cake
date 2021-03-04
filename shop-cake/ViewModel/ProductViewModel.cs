@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using shop_cake.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,16 +16,14 @@ namespace shop_cake.ViewModel
         [Required, MaxLength(100)]
         public string Name { get; set; }
 
-        [Required]
         public string Description { get; set; }
 
         [Required]
         public double UnitPrice { get; set; }
 
-        [Required]
+        [Range(0, double.MaxValue)]
         public double PromotionPrice { get; set; }
 
-        [Required, MaxLength(255)]
         public string Image { get; set; }
 
         [Required, MaxLength(255)]
@@ -34,6 +35,10 @@ namespace shop_cake.ViewModel
         public DateTime? CreateAt { get; set; }
 
         public DateTime? UpdateAt { get; set; }
+
+        [Required,DataType(DataType.Upload)]
+        [NotMapped]
+        public IFormFile ImageUpload { get; set; }
 
         [Required]
         public int IDType { get; set; }

@@ -24,7 +24,7 @@ namespace shop_cake.Controllers
         public IActionResult Index()
         {
             List<Product> allProducts = context.Products.ToList();
-            List<Product> newsproducts = context.Products.Where(x => x.New.Equals(1)).ToList();
+            List<Product> newsproducts = context.Products.Where(x => x.New.Equals(1)).OrderByDescending(x => x.ID).ToList();
 
             ViewData["allproducts"] = allProducts;
             return View(newsproducts);

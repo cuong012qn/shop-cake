@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using shop_cake.Data;
 using shop_cake.Models;
 using shop_cake.ViewModel;
+using shop_cake.Extensions;
 
 namespace shop_cake.Controllers
 {
@@ -15,10 +17,12 @@ namespace shop_cake.Controllers
     public class ProductController : Controller
     {
         private readonly ShopCakeDBContext _context;
+        private readonly IWebHostEnvironment _hosting;
 
-        public ProductController(ShopCakeDBContext context)
+        public ProductController(ShopCakeDBContext context, IWebHostEnvironment hosting)
         {
             _context = context;
+            _hosting = hosting;
         }
 
         // GET: Product
@@ -59,21 +63,38 @@ namespace shop_cake.Controllers
         // POST: Product/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost, Route("Admin/Product/Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,Description,UnitPrice,PromotionPrice,Image,Unit,New,IDType")] ProductViewModel product)
+        public async Task<IActionResult> Create(ProductViewModel productVM)
         {
             if (ModelState.IsValid)
             {
+                Product product = new Product()
+                {
+                    CreateAt = DateTime.Now,
+                    UpdateAt = DateTime.Now,
+                    IDType = productVM.IDType,
+                    Image = productVM.ImageUpload.FileName,
+                    Name = productVM.Name,
+                    Description = productVM.Description,
+                    New = productVM.New,
+                    PromotionPrice = productVM.PromotionPrice,
+                    Unit = productVM.Unit,
+                    UnitPrice = productVM.UnitPrice
+                };
+
+                await FileUploadHelper.Instance.Upload(productVM.ImageUpload, _hosting);
+
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Name"] = new SelectList(_context.TypeProducts, "ID", "Name", product.IDType);
-            return View(product);
+            ViewData["Name"] = new SelectList(_context.TypeProducts, "ID", "Name", productVM.IDType);
+            return View(productVM);
         }
 
         // GET: Product/Edit/5
+        [Route("Admin/Product/Edit")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,16 +107,33 @@ namespace shop_cake.Controllers
             {
                 return NotFound();
             }
-            ViewData["IDType"] = new SelectList(_context.TypeProducts, "ID", "Description", product.IDType);
-            return View(product);
+
+            ProductViewModel productVM = new ProductViewModel()
+            {
+                ID = product.ID,
+                CreateAt = product.CreateAt,
+                UpdateAt = product.UpdateAt,
+                Image = product.Image,
+                Description = product.Description,
+                IDType = product.IDType,
+                Name = product.Name,
+                New = product.New,
+                PromotionPrice = product.PromotionPrice,
+                UnitPrice = product.UnitPrice,
+                Unit = product.Unit
+            };
+
+            ViewData["IDType"] = new SelectList(_context.TypeProducts, "ID", "Name", productVM.IDType);
+            return View(productVM);
         }
 
         // POST: Product/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Route("Admin/Product/Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description,UnitPrice,PromotionPrice,Image,Unit,New,CreateAt,UpdateAt,IDType")] Product product)
+        public async Task<IActionResult> Edit(int id, ProductViewModel product)
         {
             if (id != product.ID)
             {
@@ -104,20 +142,36 @@ namespace shop_cake.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                var getProduct = _context.Products.SingleOrDefault(x => x.ID.Equals(id));
+                if (getProduct != null)
                 {
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductExists(product.ID))
+                    //Delete image 
+                    FileUploadHelper.Instance.Delete(getProduct.Image, _hosting);
+                    try
                     {
-                        return NotFound();
+                        await FileUploadHelper.Instance.Upload(product.ImageUpload, _hosting);
+                        getProduct.Update(
+                            product.Name, 
+                            product.Description, 
+                            product.UnitPrice, 
+                            product.PromotionPrice, 
+                            product.ImageUpload.FileName, 
+                            product.Unit, product.New, 
+                            DateTime.Now, product.IDType);
+
+                        _context.Update(getProduct);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!ProductExists(product.ID))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
                 }
                 return RedirectToAction(nameof(Index));
