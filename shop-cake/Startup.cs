@@ -36,6 +36,15 @@ namespace shop_cake
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddRazorPages().AddRazorRuntimeCompilation();
+
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(configure =>
+            {
+                configure.IdleTimeout = TimeSpan.FromMinutes(10);
+                configure.Cookie.HttpOnly = true;
+                configure.Cookie.IsEssential = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,6 +67,8 @@ namespace shop_cake
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

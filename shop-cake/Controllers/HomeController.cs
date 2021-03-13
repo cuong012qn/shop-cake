@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using shop_cake.Data;
+using shop_cake.Extensions;
+using shop_cake.ViewModel;
 
 namespace shop_cake.Controllers
 {
@@ -26,6 +28,7 @@ namespace shop_cake.Controllers
             List<Product> allProducts = context.Products.ToList();
             List<Product> newsproducts = context.Products.Where(x => x.New.Equals(1)).OrderByDescending(x => x.ID).ToList();
 
+            ViewData["Cart"] = SessionHelper.Get<ProductViewModel>(HttpContext.Session, "Cart");
             ViewData["allproducts"] = allProducts;
             return View(newsproducts);
         }
