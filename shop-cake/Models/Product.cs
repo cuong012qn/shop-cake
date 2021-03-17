@@ -46,6 +46,9 @@ namespace shop_cake.Models
 
         public IList<BillDetail> BillDetails { get; set; }
 
+        [NotMapped]
+        public int Quantity { get; set; }
+
         public void Update(string name, string description, double unitPrice, double promotionPrice,
             string image, string unit, int _new, DateTime? updateAt, int IDType)
         {

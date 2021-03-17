@@ -28,7 +28,9 @@ namespace shop_cake.Controllers
             List<Product> allProducts = context.Products.ToList();
             List<Product> newsproducts = context.Products.Where(x => x.New.Equals(1)).OrderByDescending(x => x.ID).ToList();
 
-            ViewData["Cart"] = SessionHelper.Get<ProductViewModel>(HttpContext.Session, "Cart");
+            //ViewData["message"] = "Test message";
+            List<Product> getCarts = SessionHelper.Get<List<Product>>(HttpContext.Session, "cart");
+            ViewData["cart"] = getCarts == null ? new List<Product>() : getCarts;
             ViewData["allproducts"] = allProducts;
             return View(newsproducts);
         }

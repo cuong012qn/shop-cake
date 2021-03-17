@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using shop_cake.Models;
 using shop_cake.Data;
+using shop_cake.ViewModel;
+using shop_cake.Extensions;
 
 namespace shop_cake.Controllers
 {
@@ -94,16 +96,41 @@ namespace shop_cake.Controllers
         }
 
 
-        [HttpPost, ActionName("AddCart")]
+        [ActionName("AddCart")]
         public IActionResult AddCart(int id)
         {
             var find = context.Products.SingleOrDefault(x => x.ID.Equals(id));
             if (find != null)
             {
+                List<Product> carts = SessionHelper.Get<List<Product>>(HttpContext.Session, "cart");
+                if (carts == null) carts = new List<Product>();
 
-                return StatusCode(200);
+                int index = isExists(carts, id);
+                if (index >= 0)
+                {
+                    carts[index].Quantity++;
+                }
+                else
+                {
+                    find.Quantity = 1;
+                    carts.Add(find);
+                }
+
+                SessionHelper.Set<List<Product>>(HttpContext.Session, "cart", carts);
+                return RedirectToAction("Index", "Home");
             }
             return StatusCode(404);
+        }
+
+        /// <summary>
+        /// Check item in products
+        /// </summary>
+        /// <param name="products">List of product</param>
+        /// <param name="item">item</param>
+        /// <returns>index of item in product, -1 not found</returns>
+        private int isExists(List<Product> products, int id)
+        {
+            return products.FindIndex(x => x.ID.Equals(id));
         }
     }
 }
