@@ -95,9 +95,34 @@ namespace shop_cake.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult RemoveCart(int id, int quantity)
+        {
+            var find = context.Products.SingleOrDefault(x => x.ID.Equals(id));
+            if (find != null)
+            {
+                List<Product> products = SessionHelper.Get<List<Product>>(HttpContext.Session, "cart");
+                int index = isExists(products, id);
+                if (index >= 0)
+                {
+                    if (products[index].Quantity - quantity == 0)
+                    {
+                        products.RemoveAt(index);
+                        SessionHelper.Set<List<Product>>(HttpContext.Session, "cart", products);
+                    }
+                    else
+                    {
+                        products[index].Quantity -= quantity;
+                    }
+                }
+                return RedirectToAction(nameof(Index), "Home");
+            }
+            return StatusCode(404);
+        }
 
-        [ActionName("AddCart")]
-        public IActionResult AddCart(int id)
+
+        [HttpPost]
+        public IActionResult AddCart(int id, int quantity)
         {
             var find = context.Products.SingleOrDefault(x => x.ID.Equals(id));
             if (find != null)
@@ -108,16 +133,16 @@ namespace shop_cake.Controllers
                 int index = isExists(carts, id);
                 if (index >= 0)
                 {
-                    carts[index].Quantity++;
+                    carts[index].Quantity += quantity;
                 }
                 else
                 {
-                    find.Quantity = 1;
+                    find.Quantity = quantity;
                     carts.Add(find);
                 }
 
                 SessionHelper.Set<List<Product>>(HttpContext.Session, "cart", carts);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction(nameof(Index), "Home");
             }
             return StatusCode(404);
         }

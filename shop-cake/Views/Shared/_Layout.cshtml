@@ -68,6 +68,13 @@
                                     @for (int i = 0; i < carts.Count(); i++)
                                     {
                                         <div class="cart-item">
+                                            <form method="post">
+                                                <button type="submit" class="cart-item-delete"
+                                                        asp-action="RemoveCart"
+                                                        asp-controller="Cart"
+                                                        asp-route-id="@carts[i].ID"
+                                                        asp-route-quantity="1"><i class="fa fa-times"></i></button>
+                                            </form>
                                             <div class="media">
                                                 <a class="pull-left" href="#"><img src="~/image/product/@carts[i].Image" alt=""></a>
                                                 <div class="media-body">
@@ -85,7 +92,15 @@
 
 
                                 <div class="cart-caption">
-                                    <div class="cart-total text-right">Tổng tiền: <span class="cart-total-value">$34.55</span></div>
+                                    <div class="cart-total text-right">
+                                        Tổng tiền: <span class="cart-total-value">
+                                            @carts.Sum(x =>
+                                            {
+                                                if (x.PromotionPrice != 0) return x.PromotionPrice;
+                                                else return x.UnitPrice;
+                                            }).ToString("#,###")
+                                        </span>
+                                    </div>
                                     <div class="clearfix"></div>
 
                                     <div class="center">

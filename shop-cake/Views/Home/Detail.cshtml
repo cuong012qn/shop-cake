@@ -31,32 +31,19 @@
 
                     <p>Options:</p>
                     <div class="single-item-options">
-                        <select class="wc-select" name="size">
-                            <option>Size</option>
-                            <option value="XS">XS</option>
-                            <option value="S">S</option>
-                            <option value="M">M</option>
-                            <option value="L">L</option>
-                            <option value="XL">XL</option>
-                        </select>
-                        <select class="wc-select" name="color">
-                            <option>Color</option>
-                            <option value="Red">Red</option>
-                            <option value="Green">Green</option>
-                            <option value="Yellow">Yellow</option>
-                            <option value="Black">Black</option>
-                            <option value="White">White</option>
-                        </select>
-                        <select class="wc-select" name="color">
-                            <option>Qty</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                        <a class="add-to-cart" href="#"><i class="fa fa-shopping-cart"></i></a>
-                        <div class="clearfix"></div>
+                        <form method="post">
+                            <div class="form-group">
+                                <select class="form-control" name="quantity">
+                                    <option value="1" selected>1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="add-to-cart" asp-action="AddCart" asp-controller="Cart" asp-route-id="@Model.ID"><i class="fa fa-shopping-cart"></i></button>
+                            <div class="clearfix"></div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -193,40 +180,12 @@
                                             <span class="beta-sales-price">@item.PromotionPrice</span>
                                         }
                                         else
-                                        { 
+                                        {
                                             <span class="beta-sales-price">@item.UnitPrice</span>
                                         }
                                     </div>
                                 </div>
                             }
-                            @*<div class="media beta-sales-item">
-                                    <a class="pull-left" href="product.html"><img src="assets/dest/images/products/sales/1.png" alt=""></a>
-                                    <div class="media-body">
-                                        Sample Woman Top
-                                        <span class="beta-sales-price">$34.55</span>
-                                    </div>
-                                </div>
-                                <div class="media beta-sales-item">
-                                    <a class="pull-left" href="product.html"><img src="assets/dest/images/products/sales/2.png" alt=""></a>
-                                    <div class="media-body">
-                                        Sample Woman Top
-                                        <span class="beta-sales-price">$34.55</span>
-                                    </div>
-                                </div>
-                                <div class="media beta-sales-item">
-                                    <a class="pull-left" href="product.html"><img src="assets/dest/images/products/sales/3.png" alt=""></a>
-                                    <div class="media-body">
-                                        Sample Woman Top
-                                        <span class="beta-sales-price">$34.55</span>
-                                    </div>
-                                </div>
-                                <div class="media beta-sales-item">
-                                    <a class="pull-left" href="product.html"><img src="assets/dest/images/products/sales/4.png" alt=""></a>
-                                    <div class="media-body">
-                                        Sample Woman Top
-                                        <span class="beta-sales-price">$34.55</span>
-                                    </div>
-                                </div>*@
                         </div>
                     </div>
                 </div> <!-- best sellers widget -->

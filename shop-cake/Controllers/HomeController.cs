@@ -43,7 +43,8 @@ namespace shop_cake.Controllers
         public IActionResult Detail(int? id)
         {
             if (id == null) return View(nameof(Index));
-
+            List<Product> getCarts = SessionHelper.Get<List<Product>>(HttpContext.Session, "cart");
+            ViewData["cart"] = getCarts == null ? new List<Product>() : getCarts;
             var getNewProduct = context.Products.Where(x => x.New.Equals(1)).OrderBy(x => x.UnitPrice).Take(4).ToList();
             ViewData["NewProducts"] = getNewProduct;
             var getProduct = context.Products.SingleOrDefault(x => x.ID.Equals(id));
