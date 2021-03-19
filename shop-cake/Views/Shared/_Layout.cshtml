@@ -105,7 +105,7 @@
 
                                     <div class="center">
                                         <div class="space10">&nbsp;</div>
-                                        <a href="checkout.html" class="beta-btn primary text-center">Đặt hàng <i class="fa fa-chevron-right"></i></a>
+                                        <a asp-action="Index" asp-controller="Cart" class="beta-btn primary text-center">Đặt hàng <i class="fa fa-chevron-right"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -139,7 +139,7 @@
         </div> <!-- .header-bottom -->
     </div> <!-- #header -->
 
-    @RenderSection("Slide", false);
+    @RenderSection("Slide", false)
     <div class="container">
         @RenderBody()
     </div> <!-- .container -->
@@ -209,8 +209,9 @@
         </div> <!-- .container -->
     </div> <!-- .copyright -->
     <!-- include js files -->
-    <script src="~/assets/dest/js/jquery.js"></script>
-    <script src="~/assets/dest/vendors/jqueryui/jquery-ui-1.10.4.custom.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    @*<script src="~/assets/dest/vendors/jqueryui/jquery-ui-1.10.4.custom.min.js"></script>*@
+    <script src="~/js/jquery-ui.min.js"></script>
     @*<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>*@
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/assets/dest/vendors/bxslider/jquery.bxslider.min.js"></script>
@@ -220,7 +221,7 @@
     <script src="~/assets/dest/js/scripts.min.js"></script>
     <script src="~/assets/dest/rs-plugin/js/jquery.themepunch.tools.min.js"></script>
     <script src="~/assets/dest/rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
-    <script src="~/assets/dest/js/waypoints.min.js"></script>
+    <script src="~/assets/dest/js/waypoints.js"></script>
     <script src="~/assets/dest/js/wow.min.js"></script>
     <!--customjs-->
     <script src="~/assets/dest/js/custom2.js"></script>

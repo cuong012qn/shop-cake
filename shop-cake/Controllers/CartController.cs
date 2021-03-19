@@ -23,6 +23,13 @@ namespace shop_cake.Controllers
         // GET: CartController
         public ActionResult Index()
         {
+            List<Product> products = SessionHelper.Get<List<Product>>(HttpContext.Session, "cart");
+            ViewData["cart"] = products == null ? new List<Product>() : products;
+            return View();
+        }
+
+        public IActionResult Checkout()
+        {
             return View();
         }
 
@@ -108,12 +115,12 @@ namespace shop_cake.Controllers
                     if (products[index].Quantity - quantity == 0)
                     {
                         products.RemoveAt(index);
-                        SessionHelper.Set<List<Product>>(HttpContext.Session, "cart", products);
                     }
                     else
                     {
                         products[index].Quantity -= quantity;
                     }
+                    SessionHelper.Set<List<Product>>(HttpContext.Session, "cart", products);
                 }
                 return RedirectToAction(nameof(Index), "Home");
             }
