@@ -31,10 +31,10 @@ namespace shop_cake.Controllers
         public IActionResult Checkout()
         {
             List<Product> products = SessionHelper.Get<List<Product>>(HttpContext.Session, "cart");
-            
+
             //Cart is null cannot redirect to checkout
             if (products == null)
-                return RedirectToAction("Index", "Home");
+                return StatusCode(404);
             else
             {
                 ViewData["cart"] = products;
@@ -45,16 +45,58 @@ namespace shop_cake.Controllers
 
         [HttpPost, ActionName("Checkout")]
         [ValidateAntiForgeryToken]
-        public IActionResult Checkout(Customer customer)
+        public async Task<IActionResult> Checkout(Customer customer)
         {
-            if (customer != null)
+            if (ModelState.IsValid)
             {
+                if (customer != null)
+                {
+                    List<Product> carts = SessionHelper.Get<List<Product>>(HttpContext.Session, "cart");
+                    //cart not empty
+                    if (carts.Count() > 0)
+                    {
+                        //Create customer
+                        context.Customers.Add(customer);
 
+                        //Save customer
+                        await context.SaveChangesAsync();
 
+                        //Sum total of carts
+                        double total = carts.Sum(x => x.Quantity * x.PromotionPrice != 0 ? x.PromotionPrice : x.UnitPrice);
 
-                return RedirectToAction("Index", "Home");
+                        //Create bill
+                        Bill bill = new Bill(DateTime.Now, total, "momo", customer.Note, customer.ID);
+
+                        //Save bill
+                        context.Bills.Add(bill);
+
+                        await context.SaveChangesAsync();
+
+                        List<BillDetail> billDetails = new List<BillDetail>();
+
+                        for (int i = 0; i < carts.Count(); ++i)
+                        {
+                            billDetails.Add(new BillDetail()
+                            {
+                                Quantity = carts[i].Quantity,
+                                IDProduct = carts[i].ID,
+                                UnitPrice = carts[i].PromotionPrice != 0 ? carts[i].PromotionPrice : carts[i].UnitPrice,
+                                IDBill = bill.ID
+                            });
+                        }
+
+                        context.BillDetails.AddRange(billDetails);
+
+                        await context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
+                    return RedirectToAction("Index", "Home");
+                }
             }
-            return View();
+            return View(customer);
         }
 
         // GET: CartController/Details/5

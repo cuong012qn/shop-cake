@@ -2,47 +2,57 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     List<Product> carts = ViewData["cart"] as List<Product>;
+
 }
+
+@model shop_cake.Models.Customer
 
 <div id="content">
 
-    <form action="#" method="post" class="beta-form-checkout">
+    <form asp-action="Checkout" method="post" class="beta-form-checkout">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="row">
             <div class="col-sm-6">
                 <h4>Đặt hàng</h4>
-                <div class="space20">&nbsp;</div>
+                    <div class="space20">&nbsp;</div>
 
-                <div class="form-block">
-                    <label for="name">Họ tên*</label>
-                    <input type="text" id="name" placeholder="Họ tên" required>
-                </div>
-                <div class="form-block">
-                    <label>Giới tính </label>
-                    <input id="gender" type="radio" class="input-radio" name="gender" value="nam" checked="checked" style="width: 10%"><span style="margin-right: 10%">Nam</span>
-                    <input id="gender" type="radio" class="input-radio" name="gender" value="nữ" style="width: 10%"><span>Nữ</span>
+                    <div class="form-block">
+                        <label for="name">Họ tên*</label>
+                        <input type="text" asp-for="Name" placeholder="Họ tên" required class="form-control">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div> 
+                    <div class="form-block">
+                        <label>Giới tính </label>
+                        <select asp-for="Gender" class="form-group">
+                            <option value="Nam">Nam</option>
+                            <option value="Nữ">Nữ</option>
+                        </select>
 
-                </div>
+                    </div>
 
-                <div class="form-block">
-                    <label for="email">Email*</label>
-                    <input type="email" id="email" required placeholder="expample@gmail.com">
-                </div>
+                    <div class="form-block">
+                        <label for="email">Email*</label>
+                        <input type="email" asp-for="Email" required placeholder="expample@gmail.com">
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
 
-                <div class="form-block">
-                    <label for="adress">Địa chỉ*</label>
-                    <input type="text" id="adress" placeholder="Street Address" required>
-                </div>
+                    <div class="form-block">
+                        <label for="adress">Địa chỉ*</label>
+                        <input type="text" asp-for="Address" placeholder="Street Address" required>
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
 
 
-                <div class="form-block">
-                    <label for="phone">Điện thoại*</label>
-                    <input type="text" id="phone" required>
-                </div>
+                    <div class="form-block">
+                        <label for="phone">Điện thoại*</label>
+                        <input type="text" asp-for="Phone" required>
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
 
-                <div class="form-block">
-                    <label for="notes">Ghi chú</label>
-                    <textarea id="notes"></textarea>
-                </div>
+                    <div class="form-block">
+                        <label for="notes">Ghi chú</label>
+                        <textarea asp-for="Note"></textarea>
+                    </div>
             </div>
             <div class="col-sm-6">
                 <div class="your-order">
@@ -69,18 +79,6 @@
 
                                     }
                                 }
-
-                                <!--  one item	 -->
-                                @*<div class="media">
-                                        <img width="25%" src="assets/dest/images/shoping1.jpg" alt="" class="pull-left">
-                                        <div class="media-body">
-                                            <p class="font-large">Men's Belt</p>
-                                            <span class="color-gray your-order-info">Color: Red</span>
-                                            <span class="color-gray your-order-info">Size: M</span>
-                                            <span class="color-gray your-order-info">Qty: 1</span>
-                                        </div>
-                                    </div>*@
-                                <!-- end one item -->
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -116,9 +114,17 @@
                         </ul>
                     </div>
 
-                    <div class="text-center"><a class="beta-btn primary" href="#">Đặt hàng <i class="fa fa-chevron-right"></i></a></div>
+                    <div class="text-center">
+                        <button type="submit" class="beta-btn primary" asp-action="Checkout" asp-controller="Cart">Đặt hàng <i class="fa fa-chevron-right"></i></button>
+                    </div>
                 </div> <!-- .your-order -->
             </div>
         </div>
     </form>
 </div> <!-- #content -->
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

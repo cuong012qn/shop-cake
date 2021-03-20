@@ -38,7 +38,7 @@ namespace shop_cake.Models
         public string Gender { get; set; }
 
         [Required]
-        [MaxLength(50)]
+        [MaxLength(50), DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [Required]

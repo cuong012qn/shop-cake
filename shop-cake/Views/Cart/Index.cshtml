@@ -48,9 +48,13 @@
                                 <td class="col-sm-1 col-md-1 text-center"><strong>@price.ToString("#,###")</strong></td>
                                 <td class="col-sm-1 col-md-1 text-center"><strong>@total.ToString("#,###")</strong></td>
                                 <td class="col-sm-1 col-md-1">
-                                    <button type="button" class="btn btn-danger">
-                                        <span class="glyphicon glyphicon-remove"></span> Remove
-                                    </button>
+                                    <form method="post">
+                                        <button type="submit" class="btn btn-danger"
+                                                asp-action="RemoveCart" asp-controller="Cart"
+                                                asp-route-id="@item.ID" asp-route-quantity="@item.Quantity">
+                                            <span class="glyphicon glyphicon-remove"></span> Remove
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         }

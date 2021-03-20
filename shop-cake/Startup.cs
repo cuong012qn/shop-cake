@@ -1,17 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using shop_cake.Areas.Identity.Data;
 using shop_cake.Data;
-using Microsoft.EntityFrameworkCore.SqlServer;
-using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace shop_cake
 {
@@ -69,6 +64,13 @@ namespace shop_cake
             app.UseAuthorization();
 
             app.UseSession();
+
+            app.Use(async (context, next) =>
+            {
+               await next();
+
+
+            });
 
             app.UseEndpoints(endpoints =>
             {
