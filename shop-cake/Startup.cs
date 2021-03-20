@@ -67,7 +67,7 @@ namespace shop_cake
 
             app.Use(async (context, next) =>
             {
-               await next();
+                await next();
 
 
             });
@@ -79,7 +79,12 @@ namespace shop_cake
                     pattern: "{controller=Home}/{action=Index}/{id?}");
 
                 //localhost/admin/product
-                endpoints.MapControllerRoute(name: "product", pattern: "admin/product/{controller=Product}/{action=Index}");
+                //endpoints.MapControllerRoute(name: "product", pattern: "admin/product/{controller=Product}/{action=Index}");
+
+                endpoints.MapControllerRoute(
+                        name: "Admin",
+                        pattern: "{area:Admin}/{controller=Home}/{action=Index}/{id?}"
+                        );
 
                 endpoints.MapRazorPages();
             });
