@@ -30,6 +30,30 @@ namespace shop_cake.Controllers
 
         public IActionResult Checkout()
         {
+            List<Product> products = SessionHelper.Get<List<Product>>(HttpContext.Session, "cart");
+            
+            //Cart is null cannot redirect to checkout
+            if (products == null)
+                return RedirectToAction("Index", "Home");
+            else
+            {
+                ViewData["cart"] = products;
+                return View();
+            }
+        }
+
+
+        [HttpPost, ActionName("Checkout")]
+        [ValidateAntiForgeryToken]
+        public IActionResult Checkout(Customer customer)
+        {
+            if (customer != null)
+            {
+
+
+
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
