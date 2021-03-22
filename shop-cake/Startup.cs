@@ -65,15 +65,19 @@ namespace shop_cake
 
             app.UseSession();
 
-            app.Use(async (context, next) =>
-            {
-                await next();
-
-
-            });
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapAreaControllerRoute(
+                    name: "MyAreaAdmin", 
+                    areaName: "Admin", 
+                    pattern: "Admin/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                      name: "Admin",
+                      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                      );
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
@@ -81,10 +85,7 @@ namespace shop_cake
                 //localhost/admin/product
                 //endpoints.MapControllerRoute(name: "product", pattern: "admin/product/{controller=Product}/{action=Index}");
 
-                endpoints.MapControllerRoute(
-                        name: "Admin",
-                        pattern: "{area:Admin}/{controller=Home}/{action=Index}/{id?}"
-                        );
+              
 
                 endpoints.MapRazorPages();
             });

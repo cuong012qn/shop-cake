@@ -2,14 +2,13 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-@model List<Product>
+@model PaginatedList<Product>
 
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
             Products
-            <small>Product List</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -60,7 +59,9 @@
                                     <td>Cũ</td>
                                 }
                                 <td>
-                                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model[i].ID">Sửa</a>
+                                    <a class="btn btn-primary" 
+                                       asp-action="Edit"
+                                       asp-route-id="@Model[i].ID">Sửa</a>
                                     <a class="btn btn-primary" asp-action="Delete" asp-route-id="@Model[i].ID">
                                         Xóa
                                     </a>
@@ -69,7 +70,20 @@
                         }
                     </tbody>
                 </table>
+                @{
+                    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+                }
+                <div class="float-right">
+                    <a class="btn btn-primary @prevDisabled"
+                       asp-action="Index" asp-controller="Product" asp-area="Admin"
+                       asp-route-pageNumber="@(Model.PageIndex - 1)">Previous</a>
+                    <a class="btn btn-primary @nextDisabled"
+                       asp-action="Index" asp-controller="Product" asp-area="Admin"
+                       asp-route-pageNumber="@(Model.PageIndex + 1)">Next</a>
+                </div>
             </div>
         </div>
     </section>
 </div>
+

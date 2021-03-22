@@ -8,6 +8,7 @@ using shop_cake.Models;
 using shop_cake.Data;
 using shop_cake.ViewModel;
 using shop_cake.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace shop_cake.Controllers
 {
@@ -21,16 +22,21 @@ namespace shop_cake.Controllers
 
 
         // GET: CartController
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             List<Product> products = SessionHelper.Get<List<Product>>(HttpContext.Session, "cart");
+            List<TypeProduct> typeProducts = await context.TypeProducts.ToListAsync();
+            ViewData["TypeProducts"] = typeProducts;
             ViewData["cart"] = products == null ? new List<Product>() : products;
             return View();
         }
 
-        public IActionResult Checkout()
+        public async Task<IActionResult> Checkout()
         {
             List<Product> products = SessionHelper.Get<List<Product>>(HttpContext.Session, "cart");
+
+            List<TypeProduct> typeProducts = await context.TypeProducts.ToListAsync();
+            ViewData["TypeProducts"] = typeProducts;
 
             //Cart is null cannot redirect to checkout
             if (products == null)
@@ -97,75 +103,6 @@ namespace shop_cake.Controllers
                 }
             }
             return View(customer);
-        }
-
-        // GET: CartController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: CartController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: CartController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: CartController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: CartController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: CartController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: CartController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
         }
 
         [HttpPost]

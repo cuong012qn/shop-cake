@@ -1,6 +1,7 @@
 ﻿@{
-    @using shop_cake.ViewModel;
-    List<Product> carts = ViewData["cart"] as List<Product>;
+    List<Product> carts = ViewData["cart"] as List<Product> != null ? ViewData["cart"] as List<Product> : new List<Product>();
+
+    List<TypeProduct> typeProducts = ViewData["TypeProducts"] as List<TypeProduct>;
 }
 
 <!doctype html>
@@ -73,7 +74,9 @@
                                                         asp-action="RemoveCart"
                                                         asp-controller="Cart"
                                                         asp-route-id="@carts[i].ID"
-                                                        asp-route-quantity="1"><i class="fa fa-times"></i></button>
+                                                        asp-route-quantity="1">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
                                             </form>
                                             <div class="media">
                                                 <a class="pull-left" href="#"><img src="~/image/product/@carts[i].Image" alt=""></a>
@@ -125,9 +128,14 @@
                         <li>
                             <a href="#">Sản phẩm</a>
                             <ul class="sub-menu">
-                                <li><a href="product_type.html">Sản phẩm 1</a></li>
-                                <li><a href="product_type.html">Sản phẩm 2</a></li>
-                                <li><a href="product_type.html">Sản phẩm 4</a></li>
+                                @foreach (var item in typeProducts)
+                                {
+                                    <li>
+                                        <a asp-action="Index"
+                                           asp-controller="ProductType"
+                                           asp-route-id="@item.ID">@item.Name</a>
+                                    </li>
+                                }
                             </ul>
                         </li>
                         <li><a href="about.html">Giới thiệu</a></li>

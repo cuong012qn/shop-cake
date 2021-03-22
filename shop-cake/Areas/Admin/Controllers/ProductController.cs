@@ -1,19 +1,21 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using shop_cake.Data;
-using shop_cake.Models;
-using shop_cake.ViewModel;
+using Microsoft.EntityFrameworkCore;
 using shop_cake.Extensions;
+using shop_cake.Models;
+using Microsoft.AspNetCore.Hosting;
+using shop_cake.ViewModel;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
-namespace shop_cake.Controllers
+namespace shop_cake.Areas.Admin.Controllers
 {
-    //[Route("Admin/Product")]
+    [Area("Admin")]
+    //[Authorize]
     public class ProductController : Controller
     {
         private readonly ShopCakeDBContext _context;
@@ -25,15 +27,14 @@ namespace shop_cake.Controllers
             _hosting = hosting;
         }
 
-        // GET: Product
-        [Route("Admin/Product")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? pageNumber)
         {
-            var shopCakeDBContext = _context.Products.Include(p => p.TypeProduct);
-            return View(await shopCakeDBContext.ToListAsync());
+            var products = _context.Products.Include(p => p.TypeProduct);
+            return View(await PaginatedList<Product>.CreateAsync(products.AsNoTracking(), pageNumber ?? 1, 10));
         }
 
         // GET: Product/Details/5
+        [Route("Product/Details")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -53,7 +54,7 @@ namespace shop_cake.Controllers
         }
 
         // GET: Product/Create
-        [Route("Admin/Product/Create")]
+        [Route("Product/Create")]
         public IActionResult Create()
         {
             ViewData["Name"] = new SelectList(_context.TypeProducts, "ID", "Name");
@@ -63,7 +64,7 @@ namespace shop_cake.Controllers
         // POST: Product/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, Route("Admin/Product/Create")]
+        [HttpPost, Route("Product/Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductViewModel productVM)
         {
@@ -94,7 +95,7 @@ namespace shop_cake.Controllers
         }
 
         // GET: Product/Edit/5
-        [Route("Admin/Product/Edit")]
+        [Route("Product/Edit")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -130,8 +131,7 @@ namespace shop_cake.Controllers
         // POST: Product/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [Route("Admin/Product/Edit")]
+        [HttpPost, Route("Product/Edit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ProductViewModel product)
         {
@@ -151,12 +151,12 @@ namespace shop_cake.Controllers
                     {
                         await FileUploadHelper.Instance.Upload(product.ImageUpload, _hosting);
                         getProduct.Update(
-                            product.Name, 
-                            product.Description, 
-                            product.UnitPrice, 
-                            product.PromotionPrice, 
-                            product.ImageUpload.FileName, 
-                            product.Unit, product.New, 
+                            product.Name,
+                            product.Description,
+                            product.UnitPrice,
+                            product.PromotionPrice,
+                            product.ImageUpload.FileName,
+                            product.Unit, product.New,
                             DateTime.Now, product.IDType);
 
                         _context.Update(getProduct);
@@ -181,6 +181,7 @@ namespace shop_cake.Controllers
         }
 
         // GET: Product/Delete/5
+        [Route("Product/Delete")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
