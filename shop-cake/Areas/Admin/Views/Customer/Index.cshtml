@@ -1,0 +1,77 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model PaginatedList<Customer>
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Customers
+        </h1>
+        <ol class="breadcrumb">
+            <li><a asp-action="Index" 
+                   asp-controller="Home" 
+                   asp-area="Admin"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a asp-action="Create" 
+                   asp-area="Admin"><i class="fa fa-dashboard"></i> Create</a></li>
+            <li class="active">Customers</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container">
+            <div class="row">
+                <table class="table table-responsive table-bordered table-stripped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Gender</th>
+                            <th>Email</th>
+                            <th>Address</th>
+                            <th>Phone</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            <tr>
+                                <td>@Html.Raw(i + 1)</td>
+                                <td>@Model[i].Name</td>
+                                <td>@Model[i].Gender</td>
+                                <td>@Html.Raw(@Model[i].Email)</td>
+                                <td>@Html.Raw(@Model[i].Address)</td>
+                                <td>@Html.Raw(@Model[i].Phone)</td>
+                                <td>
+                                    <a class="btn btn-primary"
+                                       asp-action="Edit"
+                                       asp-route-id="@Model[i].ID">Sửa</a>
+                                    <a class="btn btn-primary" asp-action="Delete" asp-route-id="@Model[i].ID">
+                                        Xóa
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                @{
+                    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+                }
+                <div class="float-right">
+                    <a class="btn btn-primary @prevDisabled"
+                       asp-action="Index" asp-controller="Customer" asp-area="Admin"
+                       asp-route-pageNumber="@(Model.PageIndex - 1)">Previous</a>
+                    <a class="btn btn-primary @nextDisabled"
+                       asp-action="Index" asp-controller="Customer" asp-area="Admin"
+                       asp-route-pageNumber="@(Model.PageIndex + 1)">Next</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+

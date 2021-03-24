@@ -229,6 +229,19 @@
                                 </p>
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a asp-action="Index"
+                               asp-controller="Customer"
+                               asp-area="Admin" class="nav-link">
+                                <i class="nav-icon fas fa-th"></i>
+                                <p>
+                                    Customers
+                                    @*<span class="right badge badge-danger">New</span>*@
+                                </p>
+                            </a>
+                        </li>
+
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
@@ -830,7 +843,6 @@
         </aside>
 
         <!-- Content Wrapper. Contains page content -->
-
         @RenderBody()
         <!-- /.content-wrapper -->
         <!-- Control Sidebar -->
