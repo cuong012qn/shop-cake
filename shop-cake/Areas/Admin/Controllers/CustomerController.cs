@@ -8,6 +8,7 @@ using shop_cake.Data;
 using Microsoft.EntityFrameworkCore;
 using shop_cake.Extensions;
 using shop_cake.Models;
+using Microsoft.Extensions.Logging;
 
 namespace shop_cake.Areas.Admin.Controllers
 {
@@ -15,10 +16,12 @@ namespace shop_cake.Areas.Admin.Controllers
     public class CustomerController : Controller
     {
         private readonly ShopCakeDBContext _context;
+        private readonly ILogger<CustomerController> _logger;
 
-        public CustomerController(ShopCakeDBContext context)
+        public CustomerController(ShopCakeDBContext context, ILogger<CustomerController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: CustomerController
@@ -28,9 +31,9 @@ namespace shop_cake.Areas.Admin.Controllers
         }
 
         // GET: CustomerController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            return View();
+            return View(await _context.Customers.FindAsync(id));
         }
 
         // GET: CustomerController/Create
@@ -66,36 +69,51 @@ namespace shop_cake.Areas.Admin.Controllers
         // POST: CustomerController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int id, Customer customer)
         {
             try
             {
+                Customer findCustomer = await _context.Customers.FindAsync(id);
+                if (findCustomer != null)
+                {
+                    findCustomer.Update(customer);
+                    _context.Customers.Update(findCustomer);
+                    await _context.SaveChangesAsync();
+                }
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return View();
             }
         }
 
         // GET: CustomerController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            return View();
+            return View(await _context.Customers.FindAsync(id));
         }
 
         // POST: CustomerController/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> DeleteComfirm(int id)
         {
             try
             {
+                Customer customer = await _context.Customers.FindAsync(id);
+                if (customer != null)
+                {
+                    _context.Customers.Remove(customer);
+                    await _context.SaveChangesAsync();
+                }
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                _logger.LogError(ex.Message);
+                return View(nameof(Index));
             }
         }
     }

@@ -23,7 +23,7 @@ namespace shop_cake
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ShopCakeDBContext>(options =>
-                    options.UseSqlServer(connectionString: "Server=DESKTOP-6CQ8Q1S\\SQLEXPRESS;Database=shop-cake;Trusted_Connection=True;MultipleActiveResultSets=true"));
+                    options.UseSqlServer(Configuration.GetConnectionString("ShopCakeDBContextConnection")));
 
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ShopCakeDBContext>();
@@ -85,10 +85,9 @@ namespace shop_cake
                 //localhost/admin/product
                 //endpoints.MapControllerRoute(name: "product", pattern: "admin/product/{controller=Product}/{action=Index}");
 
-              
-
                 endpoints.MapRazorPages();
             });
+
         }
     }
 }

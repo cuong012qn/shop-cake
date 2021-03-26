@@ -25,6 +25,18 @@ namespace shop_cake.Models
             Note = note;
         }
 
+        public void Update(Customer customer)
+        {
+            //ID cannot update
+            //this.ID = customer.ID;
+            this.Name = customer.Name;
+            this.Gender = customer.Gender;
+            this.Email = customer.Email;
+            this.Phone = customer.Phone;
+            this.Note = customer.Note;
+            this.Address = customer.Address;
+        }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key, Column(Order = 0)]
         public int ID { get; set; }
