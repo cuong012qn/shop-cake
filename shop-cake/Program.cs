@@ -20,6 +20,7 @@ namespace shop_cake
             using (var scope = host.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetService<ShopCakeDBContext>();
+                
                 var seeding = new DataSeeding(context);
                 seeding.SeedData();
             }
@@ -29,6 +30,11 @@ namespace shop_cake
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureLogging(config =>
+                {
+                    config.ClearProviders();
+                    config.AddConsole();
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

@@ -1,4 +1,81 @@
-﻿@{ 
+﻿@model List<OrderViewModel>
+
+@{
+    ViewData["Title"] = "List";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>List</h1>
+
+        <ol class="breadcrumb">
+            <li>
+                <a asp-action="Index"
+                   asp-controller="Home"
+                   asp-area="Admin"><i class="fa fa-dashboard"></i> Home</a>
+            </li>
+            <li>
+                <a asp-action="Create"
+                   asp-area="Admin"><i class="fa fa-dashboard"></i> Create</a>
+            </li>
+            <li class="active">Customers</li>
+        </ol>
+    </section>
+
+    <section class="content">
+        <div class="container">
+            <div class="row">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                IDOrder
+                            </th>
+                            <th>
+                                Total
+                            </th>
+                            <th>
+                                Payment
+                            </th>
+                            <th>
+                                Note
+                            </th>
+                            <th>
+                                Customer Name
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @item.IDBill
+                                </td>
+                                <td>
+                                    @item.Bill.Total.ToString("#,###")
+                                </td>
+                                <td>
+                                    @item.Bill.Payment
+                                </td>
+                                <td>
+                                    @item.Bill.Note
+                                </td>
+                                <td>
+                                    @item.Customer.Name
+                                </td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@item.IDBill">Edit</a> |
+                                    <a asp-action="Details" asp-route-id="@item.IDBill">Details</a> |
+                                    <a asp-action="Delete" asp-route-id="@item.IDBill">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>

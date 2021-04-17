@@ -5,6 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using shop_cake.Data;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using shop_cake.Extensions;
+using shop_cake.Areas.Admin.ViewModels;
 
 namespace shop_cake.Areas.Admin.Controllers
 {
@@ -12,22 +16,31 @@ namespace shop_cake.Areas.Admin.Controllers
     public class OrderController : Controller
     {
         private readonly ShopCakeDBContext _context;
+        private readonly ILogger<OrderController> _logger;
 
-        public OrderController(ShopCakeDBContext context)
+        public OrderController(ShopCakeDBContext context, ILogger<OrderController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
+
         // GET: OrderController
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            IQueryable<int> bills = _context.Bills.OrderBy(x => x.DateOrder).Select(x => x.ID);
+            List<OrderViewModel> orders = new List<OrderViewModel>();
+            foreach (var item in bills)
+            {
+                orders.Add(await OrderHelper.GetOrder(item, _context));
+            }
+            return View(orders);
         }
 
         // GET: OrderController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            return View();
+            return View(await OrderHelper.GetOrder(id, _context));
         }
 
         // GET: OrderController/Create
@@ -79,16 +92,23 @@ namespace shop_cake.Areas.Admin.Controllers
         }
 
         // POST: OrderController/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> DeleteConfirm(int id)
         {
             try
             {
+                var findOrder = await _context.Bills.FindAsync(id);
+                if (findOrder != null)
+                {
+                    _context.Bills.Remove(findOrder);
+                    await _context.SaveChangesAsync();
+                }
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return View();
             }
         }

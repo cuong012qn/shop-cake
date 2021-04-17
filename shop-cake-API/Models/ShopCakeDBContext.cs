@@ -2,20 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using shop_cake.Areas.Identity.Data;
-using shop_cake.Models;
-using shop_cake.ViewModel;
-using shop_cake.Areas.Admin.ViewModels;
 
-namespace shop_cake.Data
+namespace shop_cake_API.Models
 {
-    public class ShopCakeDBContext : IdentityDbContext<User>
+    public class ShopCakeDBContext : DbContext
     {
-        public ShopCakeDBContext(DbContextOptions<ShopCakeDBContext> options)
-            : base(options)
+        public ShopCakeDBContext(DbContextOptions options) : base(options)
         {
 
         }
@@ -35,7 +28,7 @@ namespace shop_cake.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Slide> Slides { get; set; }
         public DbSet<TypeProduct> TypeProducts { get; set; }
-        public DbSet<shop_cake.ViewModel.ProductViewModel> ProductViewModel { get; set; }
-        public DbSet<shop_cake.Areas.Admin.ViewModels.OrderViewModel> OrderViewModel { get; set; }
+
+        public DbSet<User> Users { get; set; }
     }
 }

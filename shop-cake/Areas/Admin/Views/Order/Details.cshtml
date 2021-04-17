@@ -1,0 +1,182 @@
+﻿@model shop_cake.Areas.Admin.ViewModels.OrderViewModel
+
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>Detail</h1>
+
+        <ol class="breadcrumb">
+            <li>
+                <a asp-action="Index"
+                   asp-controller="Home"
+                   asp-area="Admin"><i class="fa fa-dashboard"></i> Home</a>
+            </li>
+            <li>
+                <a asp-action="Create"
+                   asp-area="Admin"><i class="fa fa-dashboard"></i> Create</a>
+            </li>
+            <li class="active">Customers</li>
+        </ol>
+    </section>
+
+
+    <section class="content">
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <label for="GroupCustomer">Customer</label>
+                    <div class="input-group mb-3" id="GroupCustomer">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Full Name</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Full Name" aria-label="Full Name" asp-for="Customer.Name" readonly>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Gender</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Gender" aria-label="Gender" readonly asp-for="Customer.Gender">
+                    </div>
+
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Email</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Email" aria-label="Email" readonly asp-for="Customer.Email">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Phone</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Phone" aria-label="Phone" readonly asp-for="Customer.Phone">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Address</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Address" aria-label="Address" readonly asp-for="Customer.Address">
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Note</span>
+                        </div>
+                        <textarea class="form-control" aria-label="Note" asp-for="Customer.Note"></textarea>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <label for="GroupBill">Bill</label>
+                    <div class="input-group mb-3" id="GroupBill">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Date Order</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Date Order" aria-label="Date Order" asp-for="Bill.DateOrder" readonly>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-append">
+                            <span class="input-group-text">Payment</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Payment" aria-label="Recipient's Payment" asp-for="Bill.Payment" readonly>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-append">
+                            <span class="input-group-text">Total</span>
+                        </div>
+                        <input type="text" class="form-control" readonly value="@Model.Bill.Total.ToString("#,###")" aria-label="Total (VND)">
+                        <div class="input-group-append">
+                            <span class="input-group-text">Đ</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Note</span>
+                        </div>
+                        <textarea class="form-control" readonly aria-label="Note" asp-for="Bill.Note"></textarea>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Unit</th>
+                                <th scope="col">Total</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @{ int i = 0;}
+                            @foreach (var item in Model.BillDetail)
+                            {
+                                <tr>
+                                    @{
+                                        ++i;
+                                    }
+                                    <th scope="row">
+                                        @i
+                                    </th>
+                                    <td>@item.Product.Name</td>
+                                    <td>@item.Quantity</td>
+                                    <td>@item.UnitPrice</td>
+                                    <td>@item.Product.Unit</td>
+                                    <td>@item.GetTotal()</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-8"></div>
+
+                <div class="col-4 align-self-end">
+                    <div class="input-group mb-3">
+                        <div class="input-group-append">
+                            <span class="input-group-text">Subtotal</span>
+                        </div>
+                        <input type="text" class="form-control text-right" readonly value="@Model.Bill.Total.ToString("#,###")" aria-label="Total (VND)">
+                        <div class="input-group-append">
+                            <span class="input-group-text">Đ</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-append">
+                            <span class="input-group-text">Estimated shipping</span>
+                        </div>
+                        <input type="text" class="form-control text-right" readonly value="Free" aria-label="Total (VND)">
+                        <div class="input-group-append">
+                            <span class="input-group-text">Đ</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-append">
+                            <span class="input-group-text">Total</span>
+                        </div>
+                        <input type="text" class="form-control text-right " readonly value="@Model.Bill.Total.ToString("#,###")" aria-label="Total (VND)">
+                        <div class="input-group-append">
+                            <span class="input-group-text">Đ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

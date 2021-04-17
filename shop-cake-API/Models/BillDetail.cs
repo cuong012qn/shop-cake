@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace shop_cake.Models
+namespace shop_cake_API.Models
 {
     [Table("BillDetail")]
     public class BillDetail

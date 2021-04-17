@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using shop_cake.Areas.Identity.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace shop_cake.Areas.Identity.Pages.Account
 {
@@ -21,14 +22,17 @@ namespace shop_cake.Areas.Identity.Pages.Account
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly shop_cake.Data.ShopCakeDBContext _context;
 
         public LoginModel(SignInManager<User> signInManager, 
             ILogger<LoginModel> logger,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            shop_cake.Data.ShopCakeDBContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
         }
 
         [BindProperty]
@@ -65,6 +69,7 @@ namespace shop_cake.Areas.Identity.Pages.Account
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
 
+            ViewData["TypeProducts"] = await _context.TypeProducts.ToListAsync();
             returnUrl ??= Url.Content("~/");
 
             // Clear the existing external cookie to ensure a clean login process

@@ -9,6 +9,7 @@ using shop_cake.Data;
 using shop_cake.ViewModel;
 using shop_cake.Extensions;
 using Microsoft.EntityFrameworkCore;
+using shop_cake.Areas.Admin.ViewModels;
 
 namespace shop_cake.Controllers
 {
@@ -61,39 +62,7 @@ namespace shop_cake.Controllers
                     //cart not empty
                     if (carts.Count() > 0)
                     {
-                        //Create customer
-                        context.Customers.Add(customer);
-
-                        //Save customer
-                        await context.SaveChangesAsync();
-
-                        //Sum total of carts
-                        double total = carts.Sum(x => x.Quantity * x.PromotionPrice != 0 ? x.PromotionPrice : x.UnitPrice);
-
-                        //Create bill
-                        Bill bill = new Bill(DateTime.Now, total, "momo", customer.Note, customer.ID);
-
-                        //Save bill
-                        context.Bills.Add(bill);
-
-                        await context.SaveChangesAsync();
-
-                        List<BillDetail> billDetails = new List<BillDetail>();
-
-                        for (int i = 0; i < carts.Count(); ++i)
-                        {
-                            billDetails.Add(new BillDetail()
-                            {
-                                Quantity = carts[i].Quantity,
-                                IDProduct = carts[i].ID,
-                                UnitPrice = carts[i].PromotionPrice != 0 ? carts[i].PromotionPrice : carts[i].UnitPrice,
-                                IDBill = bill.ID
-                            });
-                        }
-
-                        context.BillDetails.AddRange(billDetails);
-
-                        await context.SaveChangesAsync();
+                        await OrderHelper.SetOrder(context, carts, customer);
                     }
                     else
                     {
