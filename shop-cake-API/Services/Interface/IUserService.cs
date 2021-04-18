@@ -8,7 +8,7 @@ namespace shop_cake_API.Services.Interface
 {
     public interface IUserService
     {
-        void Authencation(User user);
+        User Authencation(User user);
 
         User GetUserByID(int id);
     }

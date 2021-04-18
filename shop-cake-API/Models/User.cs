@@ -9,6 +9,19 @@ namespace shop_cake_API.Models
 {
     public class User
     {
+        public User(int iD, string username, string password, string token)
+        {
+            ID = iD;
+            Username = username;
+            Password = password;
+            Token = token;
+        }
+
+        public User()
+        {
+
+        }
+
         [Key]
         public int ID { get; set; }
         [Required]

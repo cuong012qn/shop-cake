@@ -1,15 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using shop_cake_API.Models;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
+using shop_cake_API.Services.Interface;
 
 namespace shop_cake_API.Controllers
 {
@@ -18,10 +11,12 @@ namespace shop_cake_API.Controllers
     public class LoginController : Controller
     {
         private readonly IConfiguration configuration;
+        private readonly IUserService _userService;
 
-        public LoginController(IConfiguration configuration)
+        public LoginController(IConfiguration configuration, IUserService userService)
         {
             this.configuration = configuration;
+            _userService = userService;
         }
 
         [Authorize]
@@ -35,20 +30,12 @@ namespace shop_cake_API.Controllers
         [HttpPost]
         public IActionResult Login([FromBody] User user)
         {
-            IActionResult response = Unauthorized();
-            if (user.Username.Equals("hi") && user.Password.Equals("hi"))
-            {
-                response = Ok(new
-                {
-                    token = AuthencationHelpers.GenerateJWTToken(configuration.GetValue<string>("SecretKey"),
-                    new User()
-                    {
-                        Username = "hi",
-                        Password = "Hi"
-                    }, 60)
-                });
-            }
-            return response;
+            var us = _userService.Authencation(user);
+
+            if (us == null) return Unauthorized();
+
+
+            return Ok(new { token = us.Token });
         }
     }
 }

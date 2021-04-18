@@ -18,6 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using shop_cake_API.Services.Interface;
 using shop_cake_API.Services;
+using shop_cake_API.Middleware;
 
 namespace shop_cake_API
 {
@@ -72,8 +73,10 @@ namespace shop_cake_API
 
             app.UseRouting();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            //app.UseAuthentication();
+            //app.UseAuthorization();
+
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>

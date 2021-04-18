@@ -12,7 +12,24 @@ namespace shop_cake_API.Extensions
 {
     public class JWTHelper
     {
-        private string GenerateJSONWebToken(string secretkey, User user, double expires = 60)
+        public static JwtSecurityToken ValidateJWT(string secretkey, string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(secretkey);
+            tokenHandler.ValidateToken(token, new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
+                ClockSkew = TimeSpan.Zero
+            }, out SecurityToken validatedToken);
+
+            return (JwtSecurityToken)validatedToken;
+        }
+
+        public static string GenerateJWT(string secretkey, User user, double expires = 60)
         {
             if (string.IsNullOrEmpty(secretkey) || user == null) return string.Empty;
             var symmetricKey = Encoding.UTF8.GetBytes(secretkey);
@@ -23,6 +40,7 @@ namespace shop_cake_API.Extensions
             {
                 Subject = new ClaimsIdentity(new[]
                         {
+                            new Claim("id", user.ID.ToString()),
                             new Claim(ClaimTypes.Name, user.Username)
                         }),
 
