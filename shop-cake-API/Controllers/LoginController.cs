@@ -10,20 +10,11 @@ namespace shop_cake_API.Controllers
     [Route("api/[controller]")]
     public class LoginController : Controller
     {
-        private readonly IConfiguration configuration;
         private readonly IUserService _userService;
 
-        public LoginController(IConfiguration configuration, IUserService userService)
+        public LoginController(IUserService userService)
         {
-            this.configuration = configuration;
             _userService = userService;
-        }
-
-        [Authorize]
-        [HttpGet]
-        public IActionResult GetData()
-        {
-            return Ok(new { success = true });
         }
 
         [AllowAnonymous]

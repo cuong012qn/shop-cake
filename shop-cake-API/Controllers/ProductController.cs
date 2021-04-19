@@ -11,6 +11,7 @@ namespace shop_cake_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductController : Controller
     {
         private readonly ShopCakeDBContext _context;
@@ -22,7 +23,8 @@ namespace shop_cake_API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return CreatedAtAction("Get", await _context.Products.ToListAsync());
+            return Ok(await _context.Products.ToListAsync());
+            //return CreatedAtAction("Get", await _context.Products.ToListAsync());
         }
 
         [HttpGet("{id}")]

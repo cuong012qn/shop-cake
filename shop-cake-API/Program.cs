@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using shop_cake_API.Extensions;
+using Microsoft.Extensions.DependencyInjection;
+using shop_cake_API.Models;
 
 namespace shop_cake_API
 {
@@ -14,9 +16,15 @@ namespace shop_cake_API
     {
         public static void Main(string[] args)
         {
-            //Console.Write(PasswordHashes.HashingPassword("12345"));
-            //7BF05B341F1D1A64A8DAD0C99C81B52A
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+            using (var scope = host.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetService<ShopCakeDBContext>();
+
+                var seeding = new SeedData(context);
+                seeding.Seed();
+            }
+            host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

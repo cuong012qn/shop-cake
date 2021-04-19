@@ -19,6 +19,7 @@ using System.Text;
 using shop_cake_API.Services.Interface;
 using shop_cake_API.Services;
 using shop_cake_API.Middleware;
+using shop_cake_API.Repository;
 
 namespace shop_cake_API
 {
@@ -54,6 +55,7 @@ namespace shop_cake_API
                 });
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IProductRepository, ProductRepository>();
 
             //services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = false)
             //.AddEntityFrameworkStores<ShopCakeDBContext>();
